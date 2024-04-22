@@ -1,0 +1,33 @@
+{
+  "name": "team-four-ecommerce",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Backend for SQLite ecommerce database dashboard",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lakota-camp/team-four-ecommerce.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "SQLite",
+    "daskboard",
+    "ecommerce"
+  ],
+  "author": "Lakota Camp <lakotacamp3@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lakota-camp/team-four-ecommerce/issues"
+  },
+  "homepage": "https://github.com/lakota-camp/team-four-ecommerce#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "open": "^10.1.0",
+    "sqlite3": "^5.1.7"
+  }
+}
