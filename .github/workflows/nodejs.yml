@@ -21,8 +21,8 @@ jobs:
       run: npm install
 
     # Uncomment the following two lines if your project has a build step
-    # - name: Build
-    #   run: npm run build
+    - name: Build
+      run: npm run build
 
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.12  # This GitHub Action simplifies the deployment to Heroku
