@@ -5,7 +5,7 @@ import open from 'open';
 import path from 'path';
 
 const app = express(); // Creates an express application
-const PORT = 3000; // Sets port number
+const PORT = process.env.PORT || 3000; // Dynamically sets port number for Heroku
 
 app.set('view engine', 'ejs'); // Sets the view engine to ejs
 app.use(bodyParser.urlencoded({ extended: true })); // Parses the body of the request
@@ -94,5 +94,7 @@ app.post('/results', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    open(`http://localhost:${PORT}`);
+    if (process.env.NODE_ENV !== 'production') {
+        open(`http://localhost:${PORT}`);
+    }
 });
