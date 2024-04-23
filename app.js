@@ -31,32 +31,32 @@ app.post('/results', (req, res) => {
             break;
         case 'clothing':
             query = `SELECT 
-                     Products.ProductID, 
-                     Products.ProductName, 
-                     Products.ProductDescription,
-                     Categories.CategoryID,
-                     Categories.CategoryName,
-                     Categories.CategoryDescription,
-                     Clothing.Gender AS ClothingGender,
-                     Clothing.Size AS ClothingSize
-                     FROM Products
-                     JOIN Categories ON Products.ProductID = Categories.ProductID
-                     JOIN Clothing ON Clothing.CategoryID = Categories.CategoryID;`;
+                        Products.ProductID, 
+                        Products.ProductName, 
+                        Products.ProductDescription,
+                        Categories.CategoryID,
+                        Categories.CategoryName,
+                        Categories.CategoryDescription,
+                        Clothing.Gender AS ClothingGender,
+                        Clothing.Size AS ClothingSize
+                    FROM Products
+                    JOIN Categories ON Products.ProductID = Categories.ProductID
+                    JOIN Clothing ON Clothing.CategoryID = Categories.CategoryID;`;
             break;
         case 'accessories':
             query = `SELECT 
-                     Products.ProductID, 
-                     Products.ProductName, 
-                     Products.ProductDescription,
-                     Categories.CategoryID,
-                     Categories.CategoryName,
-                     Categories.CategoryDescription,
-                     Accessories.AccessoriesType,
-                     Accessories.Gender AS AccessoriesGender,
-                     Accessories.Size AS AccessoriesSize
-                     FROM Products
-                     JOIN Categories ON Products.ProductID = Categories.ProductID
-                     JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID;`
+                        Products.ProductID, 
+                        Products.ProductName, 
+                        Products.ProductDescription,
+                        Categories.CategoryID,
+                        Categories.CategoryName,
+                        Categories.CategoryDescription,
+                        Accessories.AccessoriesType,
+                        Accessories.Gender AS AccessoriesGender,
+                        Accessories.Size AS AccessoriesSize
+                    FROM Products
+                    JOIN Categories ON Products.ProductID = Categories.ProductID
+                    JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID;`
             break;
         case 'customer_account':
             query = 'SELECT * FROM CustomerAccount;';
@@ -65,11 +65,54 @@ app.post('/results', (req, res) => {
             query = 'SELECT * FROM Vendors;';
             break;
         case 'reviews':
-            query = `SELECT Products.ProductID, Products.ProductName, CustomerAccount.CustomerID, CustomerAccount.FirstName, CustomerAccount.LastName, Reviews.RatingDate, Reviews.Rating, Reviews.Comment 
-                     FROM Reviews
-                     JOIN Products ON Reviews.ProductID = Products.ProductID
-                     JOIN CustomerAccount ON  CustomerAccount.CustomerID = Reviews.CustomerID
-                     ORDER BY Reviews.Rating;`;
+            query = `SELECT 
+                        Products.ProductID, 
+                        Products.ProductName, 
+                        CustomerAccount.CustomerID, 
+                        CustomerAccount.FirstName, 
+                        CustomerAccount.LastName, Reviews.RatingDate, 
+                        Reviews.Rating, Reviews.Comment 
+                    FROM Reviews
+                    JOIN Products ON Reviews.ProductID = Products.ProductID
+                    JOIN CustomerAccount ON  CustomerAccount.CustomerID = Reviews.CustomerID
+                    ORDER BY Reviews.Rating;`;
+            break;
+        case 'price_under_50'   :
+            query = `SELECT 
+                        Products.ProductID, 
+                        Products.ProductName,
+                        Products.ProductDescription,
+                        Products.ProductPrice,
+                        Categories.CategoryID,
+                        Categories.CategoryName,
+                        Categories.CategoryDescription,
+                        Accessories.AccessoriesType,
+                        Accessories.Gender AS AccessoriesGender,
+                        Accessories.Size AS AccessoriesSize
+                    FROM Products
+                    JOIN Categories ON Products.ProductID = Categories.ProductID
+                    JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID
+                    WHERE ProductPrice < 50
+                    ORDER BY Products.ProductPrice;`
+            break;
+        case 'quantity_over_50':
+            query = `SELECT 
+                        Products.ProductID, 
+                        Products.ProductName,
+                        Products.ProductDescription,
+                        Products.ProductPrice,
+                        Products.StockQuantity,
+                        Categories.CategoryID,
+                        Categories.CategoryName,
+                        Categories.CategoryDescription,
+                        Accessories.AccessoriesType,
+                        Accessories.Gender AS AccessoriesGender,
+                        Accessories.Size AS AccessoriesSize
+                    FROM Products
+                    JOIN Categories ON Products.ProductID = Categories.ProductID
+                    JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID
+                    WHERE StockQuantity > 50
+                    ORDER BY StockQuantity;`
             break;
         default:
             return res.send('Invalid selection');
