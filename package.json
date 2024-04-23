@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/lakota-camp/team-four-ecommerce#readme",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "open": "^10.1.0",

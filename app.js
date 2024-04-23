@@ -20,6 +20,20 @@ app.get('/', (req, res) => {
 
 app.post('/results', (req, res) => {
     const selection = req.body.selection;
+
+    const displayMapping = {
+        products: "Products",
+        categories: "Categories",
+        clothing: "Clothing",
+        accessories: "Accessories",
+        customerAccount: "Customer Account",
+        vendors: "Vendors",
+        reviews: "Product Reviews",
+        priceUnder50: "Products Under $50",
+        quantityOver50: "Quantity Over 50",
+        customerAccountReference: "Customer Account References"
+    };
+
     let query = '';
 
     switch (selection) {
@@ -58,7 +72,7 @@ app.post('/results', (req, res) => {
                     JOIN Categories ON Products.ProductID = Categories.ProductID
                     JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID;`
             break;
-        case 'customer_account':
+        case 'customerAccount':
             query = 'SELECT * FROM CustomerAccount;';
             break;  
         case 'vendors':
@@ -77,7 +91,7 @@ app.post('/results', (req, res) => {
                     JOIN CustomerAccount ON  CustomerAccount.CustomerID = Reviews.CustomerID
                     ORDER BY Reviews.Rating;`;
             break;
-        case 'price_under_50'   :
+        case 'priceUnder50':
             query = `SELECT 
                         Products.ProductID, 
                         Products.ProductName,
@@ -95,7 +109,7 @@ app.post('/results', (req, res) => {
                     WHERE ProductPrice < 50
                     ORDER BY Products.ProductPrice;`
             break;
-        case 'quantity_over_50':
+        case 'quantityOver50':
             query = `SELECT 
                         Products.ProductID, 
                         Products.ProductName,
@@ -115,7 +129,7 @@ app.post('/results', (req, res) => {
                     ORDER BY StockQuantity;`
             
             break;
-        case 'customer_account_reference':
+        case 'customerAccountReference':
             query = `SELECT 
                         c.CustomerID as CustomerID, 
                         c.FirstName as CustomerFirstName, 
@@ -142,7 +156,7 @@ app.post('/results', (req, res) => {
             return res.send("Error executing query");
         }
         db.close(() => {
-            res.render('results', { results: rows });
+            res.render('results', { selectedTable: displayMapping[selection] || selection, results: rows });
         });
     });
 });

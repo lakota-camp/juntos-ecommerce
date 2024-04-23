@@ -1,25 +1,87 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Team Four | E-Commerce Database</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+    
+        body,
+        h2,
+        label {
+            font-family: roboto, sans-serif;
+        }
+
+        /* .background {
+            background-color: #f2f2f2;
+        } */
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .custom-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .custom-button:hover {
+            background-color: #0056b3;
+        }
+
+        #submit-button {
+            margin-top: 20px;
+        }
+
+
+        label {
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
-<body>
-    <h1>E-Commerce Database Query</h1>
-    <form method="POST" action="/results">
-        <label for="selection">Select Table:</label>
-        <select name="selection">
-            <option value="products">Products</option>
-            <option value="categories">Categories</option>
-            <option value="clothing">Clothing</option>
-            <option value="accessories">Accessories</option>
-            <option value="customer_account">Customer Account</option>
-            <option value="vendors">Vendors</option>
-            <option value="reviews">Product Reviews</option>
-            <option value="price_under_50">Products Under $50</option>
-            <option value="quantity_over_50">Quantity Over 50</option>
-            <option value="customer_account_reference">Customer Account References</option>
-        </select>
-        <input type="submit" value="Submit">
-    </form>
+
+<body class="background">
+    <div class="container">
+        <h2>E-Commerce Database Query</h2>
+        <form method="POST" action="/results">
+            <label for="selection">Select Table:</label>
+            <select name="selection">
+                <option value="products">Products</option>
+                <option value="categories">Categories</option>
+                <option value="clothing">Clothing</option>
+                <option value="accessories">Accessories</option>
+                <option value="customerAccount">Customer Account</option>
+                <option value="vendors">Vendors</option>
+                <option value="reviews">Product Reviews</option>
+                <option value="priceUnder50">Products Under $50</option>
+                <option value="quantityOver50">Quantity Over 50</option>
+                <option value="customerAccountReference">Customer Account References</option>
+            </select>
+            <input type="submit" value="Submit" class="custom-button" id="submit-button">
+        </form>
+    </div>
+    
+
 </body>
+
 </html>
