@@ -113,6 +113,18 @@ app.post('/results', (req, res) => {
                     JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID
                     WHERE StockQuantity > 50
                     ORDER BY StockQuantity;`
+            
+            break;
+        case 'customer_account_reference':
+            query = `SELECT 
+                        c.CustomerID as CustomerID, 
+                        c.FirstName as CustomerFirstName, 
+                        c.LastName as CustomerLastName, 
+                        f.CustomerID as ReferenceID, 
+                        f.FirstName as CustomerReferenceFirstName, 
+                        f.LastName as CustomerReferenceLastName 
+                    FROM CustomerAccount c
+                    JOIN CustomerAccount f ON c.ReferredByCustomerID = f.CustomerID;`
             break;
         default:
             return res.send('Invalid selection');
