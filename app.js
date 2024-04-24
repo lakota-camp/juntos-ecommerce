@@ -31,7 +31,8 @@ app.post('/results', (req, res) => {
         reviews: "Product Reviews",
         priceUnder50: "Products Under $50",
         quantityOver50: "Quantity Over 50",
-        customerAccountReference: "Customer Account References"
+        customerAccountReference: "Customer Account References",
+        vendorInventoryInfo: "Vendor Inventory"
     };
 
     let query = '';
@@ -139,6 +140,17 @@ app.post('/results', (req, res) => {
                         f.LastName as CustomerReferenceLastName 
                     FROM CustomerAccount c
                     JOIN CustomerAccount f ON c.ReferredByCustomerID = f.CustomerID;`
+            break;
+        case 'vendorInventoryInfo':
+            query = `SELECT
+                       Vendors.Name AS VendorName,
+                       SUM(Products.StockQuantity) AS TotalInventoryStock,
+                       SUM(Products.ProductPrice) AS DollarAmountItems,
+                       (SUM(Products.StockQuantity) * SUM(Products.ProductPrice)) AS TotalDollarInInventory
+                    FROM Products
+                    JOIN Vendors ON Products.VendorID = Vendors.VendorID
+                    GROUP BY VendorName
+                    ORDER BY TotalDollarInInventory;`
             break;
         default:
             return res.send('Invalid selection');
