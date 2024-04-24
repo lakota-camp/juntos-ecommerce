@@ -7,16 +7,16 @@
 </head>
 
 <body>
-        {% comment %} Displays "Query Results" followed by the dynamic name selectedTable {% endcomment %}
+        
         <h2>Query Results for <%= selectedTable %> </h2> 
         <div class="table">
-            <% if (results.length > 0) { %> {% comment %} executes query if results are returned {% endcomment %} 
-                <table border="1"> {% comment %} Creates table structure with border of 1 {% endcomment %}
+            <% if (results.length > 0) { %> 
+                <table border="1">
                     <thead>
                         <tr>
-                            <% Object.keys(results[0]).forEach(function(key) { %> {% comment %} Iterates over the key of each object in results array using Object.keys() {% endcomment %} 
+                            <% Object.keys(results[0]).forEach(function(key) { %>  
                                 <th>
-                                    <%= key %> {% comment %} Each key creates table header {% endcomment %} 
+                                    <%= key %> 
                                 </th>
                                 <% }); %>
                         </tr>

@@ -14,26 +14,27 @@ app.use(bodyParser.urlencoded({ extended: true })); // Parses the body of the re
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 app.set('views', path.join(__dirname, 'templates')); // Set the views directory to 'templates'
 
+const displayMapping = {
+    products: "Products",
+    categories: "Categories",
+    clothing: "Clothing",
+    accessories: "Accessories",
+    customerAccount: "Customer Account",
+    vendors: "Vendors",
+    reviews: "Product Reviews",
+    priceUnder50: "Products Under $50",
+    quantityOver50: "Quantity Over 50",
+    customerAccountReference: "Customer Account References",
+    vendorInventoryInfo: "Vendor Inventory"
+};
+
+
 app.get('/', (req, res) => {
     res.render('index');
 });
 
 app.post('/results', (req, res) => {
     const selection = req.body.selection;
-
-    const displayMapping = {
-        products: "Products",
-        categories: "Categories",
-        clothing: "Clothing",
-        accessories: "Accessories",
-        customerAccount: "Customer Account",
-        vendors: "Vendors",
-        reviews: "Product Reviews",
-        priceUnder50: "Products Under $50",
-        quantityOver50: "Quantity Over 50",
-        customerAccountReference: "Customer Account References",
-        vendorInventoryInfo: "Vendor Inventory"
-    };
 
     let query = '';
 
@@ -172,6 +173,7 @@ app.post('/results', (req, res) => {
         });
     });
 });
+
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
