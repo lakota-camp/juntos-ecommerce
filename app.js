@@ -27,8 +27,9 @@ const displayMapping = {
     customerAccountReference: "Customer Account References",
     vendorInventoryInfo: "Vendor Inventory",
     productCategoryClothing: "Clothing Products",
-    productCategoryAccessories: "Accessories Products"
-
+    productCategoryAccessories: "Accessories Products",
+    minMaxAssetValueClothingAccessories: "Minimum and Maximum Asset Value of Clothing and Accessories",
+    numberItemsInCart: "Number of Items in Customer Carts"
 };
 
 
@@ -112,7 +113,7 @@ app.post('/results', (req, res) => {
                     JOIN Categories ON Products.ProductID = Categories.ProductID
                     JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID
                     WHERE ProductPrice < 50
-                    ORDER BY Products.ProductPrice;`
+                    ORDER BY Products.ProductPrice;`;
             break;
         case 'quantityOver50':
             query = `SELECT 
@@ -131,7 +132,7 @@ app.post('/results', (req, res) => {
                     JOIN Categories ON Products.ProductID = Categories.ProductID
                     JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID
                     WHERE StockQuantity > 50
-                    ORDER BY StockQuantity;`
+                    ORDER BY StockQuantity;`;
             
             break;
         case 'customerAccountReference':
@@ -143,7 +144,7 @@ app.post('/results', (req, res) => {
                         f.FirstName as CustomerReferenceFirstName, 
                         f.LastName as CustomerReferenceLastName 
                     FROM CustomerAccount c
-                    JOIN CustomerAccount f ON c.ReferredByCustomerID = f.CustomerID;`
+                    JOIN CustomerAccount f ON c.ReferredByCustomerID = f.CustomerID;`;
             break;
         case 'vendorInventoryInfo':
             query = `SELECT
@@ -154,7 +155,7 @@ app.post('/results', (req, res) => {
                     FROM Products
                     JOIN Vendors ON Products.VendorID = Vendors.VendorID
                     GROUP BY VendorName
-                    ORDER BY TotalDollarInInventory;`
+                    ORDER BY TotalDollarInInventory;`;
             break;
         case 'productCategoryClothing':
             query = `SELECT
@@ -163,8 +164,7 @@ app.post('/results', (req, res) => {
                       Clothing.ClothingType, Clothing.Gender, Clothing.Size
                     FROM Products
                     JOIN Categories ON Products.ProductID = Categories.CategoryID
-                    JOIN Clothing ON Categories.CategoryID = Clothing.CategoryID;
-            `
+                    JOIN Clothing ON Categories.CategoryID = Clothing.CategoryID;`;
             break;
         case 'productCategoryAccessories':
             query = `SELECT
@@ -173,9 +173,54 @@ app.post('/results', (req, res) => {
                       Accessories.AccessoriesType, Accessories.Gender, Accessories.Size
                     FROM Products
                     JOIN Categories ON Products.ProductID = Categories.CategoryID
-                    JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID;
-            `
+                    JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID;`;
             break;
+        case 'minMaxAssetValueClothingAccessories':
+            query = `SELECT 
+                        Categories.CategoryName,
+                        MAX(StockQuantity * ProductPrice) AS AssetValueInStock
+                    FROM Products
+                    JOIN Categories ON Products.ProductID = Categories.ProductID
+                    JOIN Clothing ON Categories.CategoryID = Clothing.CategoryID
+
+                    UNION
+
+                        SELECT 
+                            Categories.CategoryName,
+                            MIN(StockQuantity * ProductPrice) AS AssetValueInStock
+                        FROM Products
+                        JOIN Categories ON Products.ProductID = Categories.ProductID
+                        JOIN Clothing ON Categories.CategoryID = Clothing.CategoryID
+
+                    UNION
+
+                        SELECT 
+                            Categories.CategoryName,
+                            MAX(StockQuantity * ProductPrice) AS AssetValueInStock
+                        FROM Products
+                        JOIN Categories ON Products.ProductID = Categories.ProductID
+                        JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID
+
+                    UNION
+
+                        SELECT 
+                            Categories.CategoryName,
+                            MIN(StockQuantity * ProductPrice) AS AssetValueInStock
+                        FROM Products
+                        JOIN Categories ON Products.ProductID = Categories.ProductID
+                        JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID
+                        ORDER BY Categories.CategoryName;`;
+                break;
+            case 'numberItemsInCart':
+                query = `SELECT 
+                          CustomerAccount.CustomerID, CustomerAccount.FirstName, CustomerAccount.LastName,
+                          ShoppingCart.CartID,
+                          COUNT(CartItem.CartIemID) AS ItemsInCart
+                    FROM ShoppingCart
+                    JOIN CartItem ON ShoppingCart.CartID = CartItem.CartID
+                    JOIN CustomerAccount ON ShoppingCart.CustomerID = CustomerAccount.CustomerID
+                    GROUP BY ShoppingCart.CartID;`;
+                break;
         default:
             return res.send('Invalid selection');
     }
