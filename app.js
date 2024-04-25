@@ -25,7 +25,10 @@ const displayMapping = {
     priceUnder50: "Products Under $50",
     quantityOver50: "Quantity Over 50",
     customerAccountReference: "Customer Account References",
-    vendorInventoryInfo: "Vendor Inventory"
+    vendorInventoryInfo: "Vendor Inventory",
+    productCategoryClothing: "Clothing Products",
+    productCategoryAccessories: "Accessories Products"
+
 };
 
 
@@ -152,6 +155,26 @@ app.post('/results', (req, res) => {
                     JOIN Vendors ON Products.VendorID = Vendors.VendorID
                     GROUP BY VendorName
                     ORDER BY TotalDollarInInventory;`
+            break;
+        case 'productCategoryClothing':
+            query = `SELECT
+                      Products.ProductID, Products.ProductName, Products.ProductPrice, Products.StockQuantity,
+                      Categories.CategoryID, Categories.CategoryName,
+                      Clothing.ClothingType, Clothing.Gender, Clothing.Size
+                    FROM Products
+                    JOIN Categories ON Products.ProductID = Categories.CategoryID
+                    JOIN Clothing ON Categories.CategoryID = Clothing.CategoryID;
+            `
+            break;
+        case 'productCategoryAccessories':
+            query = `SELECT
+                      Products.ProductID, Products.ProductName, Products.ProductPrice, Products.StockQuantity,
+                      Categories.CategoryID, Categories.CategoryName,
+                      Accessories.AccessoriesType, Accessories.Gender, Accessories.Size
+                    FROM Products
+                    JOIN Categories ON Products.ProductID = Categories.CategoryID
+                    JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID;
+            `
             break;
         default:
             return res.send('Invalid selection');
