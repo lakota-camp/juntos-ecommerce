@@ -217,8 +217,8 @@ app.post('/results', (req, res) => {
                           ShoppingCart.CartID,
                           COUNT(CartItem.CartIemID) AS ItemsInCart
                     FROM ShoppingCart
-                    JOIN CartItem ON ShoppingCart.CartID = CartItem.CartID
-                    JOIN CustomerAccount ON ShoppingCart.CustomerID = CustomerAccount.CustomerID
+                    LEFT JOIN CartItem ON ShoppingCart.CartID = CartItem.CartID
+                    LEFT JOIN CustomerAccount ON ShoppingCart.CustomerID = CustomerAccount.CustomerID
                     GROUP BY ShoppingCart.CartID;`;
                 break;
         default:
