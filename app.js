@@ -226,18 +226,18 @@ app.post('/results', (req, res) => {
                 query = `SELECT
                             CustomerAccount.CustomerID, CustomerAccount.FirstName, CustomerAccount.LastName,
                             Orders.OrderID, Orders.OrderDate, Orders.ShippingCity, Orders.ShippingState,
-                            OrderItems.OrderItemsID, (OrderItems.Quantity * Products.ProductPrice) AS OrderTotal,
+                            (OrderItems.Quantity * Products.ProductPrice) AS OrderTotal,
                             CASE
                                 WHEN (OrderItems.Quantity * Products.ProductPrice) < 50 THEN 'Small Order: OrderTotal < $50'
                                 WHEN ((OrderItems.Quantity * Products.ProductPrice) >= 50) AND (OrderItems.Quantity * Products.ProductPrice) < 100 THEN 'Medium Order: OrderTotal <= $50'
                                 WHEN (OrderItems.Quantity * Products.ProductPrice) >= 100 THEN 'Large Order: OrderTotal > $100'
                                 ELSE 'Invalid OrderTotal'
-                            END AS OrderTotalCategory,
-                            Products.ProductID, Products.ProductName
+                            END AS OrderTotalCategory
                         FROM Orders
                         JOIN CustomerAccount ON Orders.CustomerID = CustomerAccount.CustomerID
                         JOIN OrderItems ON Orders.OrderID = OrderItems.OrderID
                         JOIN Products ON OrderItems.ProductID = Products.ProductID
+                        GROUP BY Orders.OrderID
                         ORDER BY OrderTotalCategory DESC;`
                 break;
         default:
