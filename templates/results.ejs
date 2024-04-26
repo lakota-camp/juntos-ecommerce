@@ -4,11 +4,67 @@
 <head>
     <title>Query Results</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body, header {
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            position: sticky;
+            top: 0;
+            background-color: #202b45;
+            width: 100%;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1)
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+    
+        }
+    
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        th {
+            background-color: #f2f2f2;
+        }
+    
+        .table {
+            overflow-x: auto;
+            padding: 40px;
+        }
+    
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+    
+        h2,
+        table,
+        p {
+            font-family: roboto, sans-serif;
+        }
+    
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #E8E8E8;
+        }
+        
+    </style>
 </head>
 
 <body>
-        
-        <h2>Query Results for <%= selectedTable %> </h2> 
+    <header>
+        <h2>Query Results: <%= selectedTable %></h2>
+    </header>
         <div class="table">
             <% if (results.length > 0) { %> 
                 <table border="1">
@@ -38,43 +94,6 @@
                     <% } %>
         </div>
 </body>
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
 
-    }
-
-    th,
-    td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    .table {
-        overflow-x: auto;
-        padding: 20px;
-    }
-
-    tr:hover {
-        background-color: #f2f2f2;
-    }
-
-    h2,
-    table,
-    p {
-        font-family: roboto, sans-serif;
-    }
-
-    h2 {
-        padding-top: 20px;
-        text-align: center;
-    }
-</style>
 
 </html>

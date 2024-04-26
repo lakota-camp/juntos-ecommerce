@@ -28,8 +28,9 @@ const displayMapping = {
     vendorInventoryInfo: "Vendor Inventory",
     productCategoryClothing: "Clothing Products",
     productCategoryAccessories: "Accessories Products",
-    minMaxAssetValueClothingAccessories: "Minimum and Maximum Asset Value of Clothing and Accessories",
-    numberItemsInCart: "Number of Items in Customer Carts"
+    minMaxAssetValueClothingAccessories: "Min/Max Asset Value for Clothing and Accessories",
+    numberItemsInCart: "Number of Items in Customer Carts",
+    orderTotalCategories: "Order Total Categories"
 };
 
 
@@ -220,6 +221,24 @@ app.post('/results', (req, res) => {
                     LEFT JOIN CartItem ON ShoppingCart.CartID = CartItem.CartID
                     LEFT JOIN CustomerAccount ON ShoppingCart.CustomerID = CustomerAccount.CustomerID
                     GROUP BY ShoppingCart.CartID;`;
+                break;
+            case 'orderTotalCategories':
+                query = `SELECT
+                            CustomerAccount.CustomerID, CustomerAccount.FirstName, CustomerAccount.LastName,
+                            Orders.OrderID, Orders.OrderDate, Orders.ShippingCity, Orders.ShippingState,
+                            OrderItems.OrderItemsID, (OrderItems.Quantity * Products.ProductPrice) AS OrderTotal,
+                            CASE
+                                WHEN (OrderItems.Quantity * Products.ProductPrice) < 50 THEN 'Small Order: OrderTotal < $50'
+                                WHEN ((OrderItems.Quantity * Products.ProductPrice) >= 50) AND (OrderItems.Quantity * Products.ProductPrice) < 100 THEN 'Medium Order: OrderTotal <= $50'
+                                WHEN (OrderItems.Quantity * Products.ProductPrice) >= 100 THEN 'Large Order: OrderTotal > $100'
+                                ELSE 'Invalid OrderTotal'
+                            END AS OrderTotalCategory,
+                            Products.ProductID, Products.ProductName
+                        FROM Orders
+                        JOIN CustomerAccount ON Orders.CustomerID = CustomerAccount.CustomerID
+                        JOIN OrderItems ON Orders.OrderID = OrderItems.OrderID
+                        JOIN Products ON OrderItems.ProductID = Products.ProductID
+                        ORDER BY OrderTotalCategory DESC;`
                 break;
         default:
             return res.send('Invalid selection');

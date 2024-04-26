@@ -8,11 +8,25 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
+        body, header {
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f2f2f2;
             margin: 0;
             padding: 0;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            background-color: #202b45;
+            width: 100%;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1)
         }
     
         .container {
@@ -20,13 +34,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            {% comment %} height: 100vh; {% endcomment %}
-            padding-top: 20vh;
+            padding-top: 5vh;
         }
     
         h2 {
             font-size: 28px;
             margin-bottom: 20px;
+            text-align: center;
+            color: #F5F5F5;
         }
     
         form {
@@ -69,8 +84,10 @@
 </head>
 
 <body class="background">
+    <header>
+        <h2>JUNTOS Apparel Database</h2>
+    </header>
     <div class="container">
-        <h2>JUNTOS Apparel Database Query</h2>
         <form method="POST" action="/results">
             <label for="selection">Select Table:</label>
             <select name="selection">
@@ -87,8 +104,9 @@
                 <option value="vendorInventoryInfo">Vendor Inventory</option>
                 <option value="productCategoryClothing">Clothing Products</option>
                 <option value="productCategoryAccessories">Accessories Products</option>
-                <option value="minMaxAssetValueClothingAccessories">Minimum and Maximum Asset Value of Clothing and Accessories</option>
+                <option value="minMaxAssetValueClothingAccessories">Min/Max Asset Value for Clothing and Accessories</option>
                 <option value="numberItemsInCart">Number of Items in Customer Carts</option>
+                <option value="orderTotalCategories">Order Total Categories</option>
             </select>
             <input type="submit" value="Submit" class="custom-button" id="submit-button">
         </form>
