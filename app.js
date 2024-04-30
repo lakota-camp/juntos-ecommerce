@@ -177,40 +177,44 @@ app.post('/results', (req, res) => {
                     JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID;`;
             break;
         case 'minMaxAssetValueClothingAccessories':
-            query = `SELECT 
-                        Categories.CategoryName,
+            query = `SELECT
+                        Products.ProductName,
+                        Categories.CategoryName,   
                         MAX(StockQuantity * ProductPrice) AS AssetValueInStock
-                    FROM Products
-                    JOIN Categories ON Products.ProductID = Categories.ProductID
-                    JOIN Clothing ON Categories.CategoryID = Clothing.CategoryID
-
-                    UNION
-
-                        SELECT 
-                            Categories.CategoryName,
-                            MIN(StockQuantity * ProductPrice) AS AssetValueInStock
                         FROM Products
                         JOIN Categories ON Products.ProductID = Categories.ProductID
                         JOIN Clothing ON Categories.CategoryID = Clothing.CategoryID
-
-                    UNION
-
-                        SELECT 
-                            Categories.CategoryName,
-                            MAX(StockQuantity * ProductPrice) AS AssetValueInStock
+                        
+                        UNION
+                        
+                        SELECT
+                        Products.ProductName,
+                        Categories.CategoryName, 
+                        MIN(StockQuantity * ProductPrice) AS AssetValueInStock
+                        FROM Products
+                        JOIN Categories ON Products.ProductID = Categories.ProductID
+                        JOIN Clothing ON Categories.CategoryID = Clothing.CategoryID
+                        
+                        UNION
+                        
+                        SELECT
+                        Products.ProductName,
+                        Categories.CategoryName, 
+                        MAX(StockQuantity * ProductPrice) AS AssetValueInStock
                         FROM Products
                         JOIN Categories ON Products.ProductID = Categories.ProductID
                         JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID
-
-                    UNION
-
-                        SELECT 
-                            Categories.CategoryName,
-                            MIN(StockQuantity * ProductPrice) AS AssetValueInStock
+                        
+                        UNION
+                        
+                        SELECT
+                        Products.ProductName,
+                        Categories.CategoryName, 
+                        MIN(StockQuantity * ProductPrice) AS AssetValueInStock
                         FROM Products
                         JOIN Categories ON Products.ProductID = Categories.ProductID
                         JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID
-                        ORDER BY Categories.CategoryName;`;
+                        ORDER BY AssetValueInStock;`;
                 break;
             case 'numberItemsInCart':
                 query = `SELECT 
