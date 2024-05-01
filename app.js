@@ -30,7 +30,8 @@ const displayMapping = {
     productCategoryAccessories: "Accessories Products",
     minMaxAssetValueClothingAccessories: "Min/Max Asset Value for Clothing and Accessories",
     numberItemsInCart: "Number of Items in Customer Carts",
-    orderTotalCategories: "Order Total Categories"
+    orderTotalCategories: "Order Total Categories",
+    productsGreaterAvgPrice: "Product prices greater than average"
 };
 
 
@@ -243,6 +244,12 @@ app.post('/results', (req, res) => {
                         JOIN Products ON OrderItems.ProductID = Products.ProductID
                         GROUP BY Orders.OrderID
                         ORDER BY OrderTotalCategory DESC;`
+                break;
+            case 'productsGreaterAvgPrice':
+                query = `SELECT
+                            ProductName, ProductPrice
+                        FROM Products
+                        WHERE ProductPrice > (SELECT AVG(ProductPrice) FROM Products);`
                 break;
         default:
             return res.send('Invalid selection');
