@@ -233,7 +233,7 @@ app.post('/results', (req, res) => {
                             (OrderItems.Quantity * Products.ProductPrice) AS OrderTotal,
                             CASE
                                 WHEN (OrderItems.Quantity * Products.ProductPrice) < 50 THEN 'Small Order: OrderTotal < $50'
-                                WHEN ((OrderItems.Quantity * Products.ProductPrice) >= 50) AND (OrderItems.Quantity * Products.ProductPrice) < 100 THEN 'Medium Order: OrderTotal <= $50'
+                                WHEN ((OrderItems.Quantity * Products.ProductPrice) >= 50) AND (OrderItems.Quantity * Products.ProductPrice) < 100 THEN 'Medium Order: OrderTotal >= $50'
                                 WHEN (OrderItems.Quantity * Products.ProductPrice) >= 100 THEN 'Large Order: OrderTotal > $100'
                                 ELSE 'Invalid OrderTotal'
                             END AS OrderTotalCategory
