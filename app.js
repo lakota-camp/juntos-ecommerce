@@ -31,7 +31,10 @@ const displayMapping = {
     minMaxAssetValueClothingAccessories: "Min/Max Asset Value for Clothing and Accessories",
     numberItemsInCart: "Number of Items in Customer Carts",
     orderTotalCategories: "Order Total Categories",
-    productsGreaterAvgPrice: "Product prices greater than average"
+    productsGreaterAvgPrice: "Product prices greater than average",
+    productsLessAvgPrice: "Product prices less than average",
+    accessoriesCount: "Total Accessories",
+    clothingCount: "Total Clothing"
 };
 
 
@@ -65,6 +68,11 @@ app.post('/results', (req, res) => {
                     JOIN Categories ON Products.ProductID = Categories.ProductID
                     JOIN Clothing ON Clothing.CategoryID = Categories.CategoryID;`;
             break;
+            case 'clothingCount':
+                query = `SELECT 
+                    COUNT(*) AS TotalClothing
+                    FROM Clothing;`
+                break;
         case 'accessories':
             query = `SELECT 
                         Products.ProductID, 
@@ -79,6 +87,11 @@ app.post('/results', (req, res) => {
                     FROM Products
                     JOIN Categories ON Products.ProductID = Categories.ProductID
                     JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID;`
+            break;
+        case 'accessoriesCount':
+            query = `SELECT 
+                COUNT(*) AS TotalAccessories 
+                FROM Accessories;`
             break;
         case 'customerAccount':
             query = 'SELECT * FROM CustomerAccount;';
@@ -250,6 +263,12 @@ app.post('/results', (req, res) => {
                             ProductName, ProductPrice
                         FROM Products
                         WHERE ProductPrice > (SELECT AVG(ProductPrice) FROM Products);`
+                break;
+            case 'productsLessAvgPrice':
+                query = `SELECT
+                            ProductName, ProductPrice
+                        FROM Products
+                        WHERE ProductPrice < (SELECT AVG(ProductPrice) FROM Products);`
                 break;
         default:
             return res.send('Invalid selection');
