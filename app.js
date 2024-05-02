@@ -34,7 +34,13 @@ const displayMapping = {
     productsGreaterAvgPrice: "Product prices greater than average",
     productsLessAvgPrice: "Product prices less than average",
     accessoriesCount: "Total Accessories",
-    clothingCount: "Total Clothing"
+    clothingCount: "Total Clothing",
+    numberOrdersPerCustomer: "Number of Orders per Customer",
+    accountOrderPaymentProducts: "Account, Order, Payment, and Products",
+    correlatedProductOver50: "Products Over $50",
+    inArizonOrCalifornia: "Customers in Arizona or California",
+    selfJoinVendors: "Self Join Vendors",
+    outerJoinProductReviews: "Outer Join Product Reviews",
 };
 
 
@@ -269,6 +275,61 @@ app.post('/results', (req, res) => {
                             ProductName, ProductPrice
                         FROM Products
                         WHERE ProductPrice < (SELECT AVG(ProductPrice) FROM Products);`
+                break;
+            case 'numberOrdersPerCustomer':
+                query = `SELECT 
+                            CustomerID,
+                            Count(*) AS NumberOfOrders
+                        FROM Orders
+                        GROUP BY CustomerID;`
+                break;
+            case 'accountOrderPaymentProducts':
+                query = `SELECT
+                            CustomerAccount.CustomerID,
+                            CustomerAccount.FirstName, CustomerAccount.LastName,
+                            Orders.OrderID,
+                            Orders.OrderDate,
+                            OrderItems.OrderItemsID,
+                            Products.ProductPrice,
+                            OrderItems.Quantity,
+                            Payment.Amount,
+                            Products.ProductID,
+                            Products.ProductName,
+                            Categories.CategoryID,
+                            Categories.CategoryName
+                        FROM CustomerAccount
+                        JOIN Orders ON CustomerAccount.CustomerID = Orders.OrderID
+                        JOIN Payment ON Orders.OrderID = Payment.OrderID
+                        JOIN OrderItems ON Orders.OrderID = OrderItems.OrderID
+                        JOIN Products ON OrderItems.ProductID = Products.ProductID
+                        JOIN Categories ON Products.ProductID = Categories.ProductID
+                        LEFT JOIN Accessories ON Categories.CategoryID = Accessories.CategoryID
+                        LEFT JOIN Clothing ON Categories.CategoryID = Clothing.CategoryID;`;
+                break;
+            case 'correlatedProductOver50':
+                query = `SELECT DISTINCT ProductID, ProductName FROM Products
+                        WHERE EXISTS
+                            (SELECT *
+                            FROM OrderItems
+                            WHERE ProductID = OrderItems.ProductID
+                            AND ProductPrice > 50);`;
+                break;
+            case 'inArizonOrCalifornia':
+                query = `SELECT * FROM CustomerAccount
+                        WHERE (BillingState = 'CA') OR (BillingState = 'AZ');`;
+                break;
+            case 'selfJoinVendors':
+                query = `SELECT a.ProductName AS Vendor1, b.ProductName AS Vendor2
+                         FROM Products a
+                         JOIN Products b ON a.VendorID = b.VendorID
+                         WHERE a.ProductID < b.ProductID;`  
+                          
+                break;
+            case 'outerJoinProductReviews':
+                query = `SELECT Products.ProductName, Reviews.Comment
+                         FROM Products
+                         LEFT JOIN Reviews ON Products.ProductID = Reviews.ProductID
+                         ORDER BY Products.ProductName;`
                 break;
         default:
             return res.send('Invalid selection');
