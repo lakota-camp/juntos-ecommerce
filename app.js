@@ -5,7 +5,7 @@ import open from 'open';
 import path from 'path';
 
 const app = express(); // Creates an express application
-const PORT = 3000; // Dynamically sets port number
+const PORT = process.env.PORT || 3000; // Dynamically sets port number
 
 app.set('view engine', 'ejs'); // Sets the view engine to ejs
 app.use(bodyParser.urlencoded({ extended: true })); // Parses the body of the request
