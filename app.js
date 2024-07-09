@@ -5,7 +5,7 @@ import open from 'open';
 import path from 'path';
 
 const app = express(); // Creates an express application
-const PORT = process.env.PORT || 3000; // Dynamically sets port number for Heroku
+const PORT = 3000; // Dynamically sets port number
 
 app.set('view engine', 'ejs'); // Sets the view engine to ejs
 app.use(bodyParser.urlencoded({ extended: true })); // Parses the body of the request
@@ -38,7 +38,7 @@ const displayMapping = {
     numberOrdersPerCustomer: "Number of Orders per Customer",
     accountOrderPaymentProducts: "Account, Order, Payment, and Products",
     correlatedProductOver50: "Products Over $50",
-    inArizonOrCalifornia: "Customers in Arizona or California",
+    inArizonaOrCalifornia: "Customers in Arizona or California",
     selfJoinVendors: "Self Join Vendors",
     outerJoinProductReviews: "Outer Join Product Reviews",
 };
@@ -314,7 +314,7 @@ app.post('/results', (req, res) => {
                             WHERE ProductID = OrderItems.ProductID
                             AND ProductPrice > 50);`;
                 break;
-            case 'inArizonOrCalifornia':
+            case 'inArizonaOrCalifornia':
                 query = `SELECT * FROM CustomerAccount
                         WHERE (BillingState = 'CA') OR (BillingState = 'AZ');`;
                 break;
